@@ -26,7 +26,7 @@ export default function App() {
           </p>
 
           <button className="mt-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold text-lg shadow-lg shadow-indigo-500/30 hover:scale-105 hover:shadow-indigo-500/50 transition-all duration-200 cursor-pointer">
-            Get Started
+            Let's Ding-Dong
           </button>
         </div>
 
