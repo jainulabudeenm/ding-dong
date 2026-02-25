@@ -1,10 +1,40 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useState, useEffect } from 'react'
+import { supabase } from './lib/supabase'
+import Auth from './Auth'
 
 const Spline = lazy(() => import('@splinetool/react-spline'))
 
 export default function App() {
+  const [session, setSession] = useState(undefined)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // Still loading initial session
+  if (session === undefined) return null
+
+  if (!session) return <Auth />
+
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">
+
+      {/* Sign Out button */}
+      <button
+        onClick={() => supabase.auth.signOut()}
+        className="fixed top-5 right-5 z-50 px-4 py-2 rounded-xl border border-white/10 text-gray-400 text-sm font-medium hover:bg-white/5 hover:text-white hover:border-white/20 transition-all duration-200"
+      >
+        Sign Out
+      </button>
+
       <div className="max-w-7xl mx-auto px-6 min-h-screen relative flex flex-col lg:grid lg:grid-cols-2 items-center">
 
         {/* Left — Text content */}
