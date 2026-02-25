@@ -18,6 +18,20 @@ export default function Auth() {
     setLoading(false)
   }
 
+  async function handleForgotPassword() {
+    setError(null)
+    setMessage(null)
+    if (!email) {
+      setError('Enter your email address above first.')
+      return
+    }
+    setLoading(true)
+    const { error } = await supabase.auth.resetPasswordForEmail(email)
+    if (error) setError(error.message)
+    else setMessage('Password reset link sent — check your email.')
+    setLoading(false)
+  }
+
   async function handleLogIn() {
     setError(null)
     setMessage(null)
@@ -69,6 +83,15 @@ export default function Auth() {
               className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition"
             />
           </div>
+
+          {/* Forgot password */}
+          <button
+            onClick={handleForgotPassword}
+            disabled={loading}
+            className="text-xs text-gray-500 hover:text-indigo-400 transition-colors text-right -mt-3 disabled:cursor-not-allowed"
+          >
+            Forgot Password?
+          </button>
 
           {/* Error */}
           {error && (
